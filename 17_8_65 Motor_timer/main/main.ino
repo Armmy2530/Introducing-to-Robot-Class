@@ -1,9 +1,9 @@
-#define r1 13
+#define r1 14
 #define r2 12
-#define r  11
-#define l1 8
-#define l2 9
-#define l  10
+#define r  13
+#define l1 25
+#define l2 26
+#define l  27
 
 void setup(){
     for(int i=8;i<=13;i++){

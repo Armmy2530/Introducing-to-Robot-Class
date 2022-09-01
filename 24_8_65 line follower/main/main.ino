@@ -4,7 +4,7 @@ int enA = 10;
 int in1 = 8;
 int in2 = 9;
 // Motor R 
-int enB = 11;
+int enB = 11;0
 int in3 = 13;
 int in4 = 12;
 
@@ -27,8 +27,8 @@ void loop(){
     int L = digitalRead(5);
     int R = digitalRead(4);
     if(L == 1 && R == 1){m(100,90);}
-    else if(L == 0 && R == 1){tl(90);delay(turn_ms);}
-    else if(L == 1 && R == 0){tr(90);delay(turn_ms);}
+    else if(L == 0 && R == 1){tl(90,90);delay(turn_ms);}
+    else if(L == 1 && R == 0){tr(90,90);delay(turn_ms);}
     else{stop(false);}
 }
 
