@@ -70,24 +70,25 @@ void setup()
     trackline_L(60,1,0);
     trackline_Cross(60,1,0);
     trackline_R(60,1,0);
-    trackline_Cross(60,2,100);
+    trackline_Cross(60,2,150);
     tl(40,80);
     delay(600);
     tl_sensor(50,80);
+    delay(300);
     trackline_R(60,2,100);
     readSensor();
-    tr(60,60);
-    delay(400);
+    tr(100,60);
+    delay(100);
     while(!(W(L2_value) && W(L1_value) && B(C_value) && W(R1_value) && W(R2_value))){
         readSensor();
         tr(60,60);
     }
     stop(false);
     delay(100);
-    fd(80,80);
-    delay(500);
-    tr(60,60);
-    delay(400);
+    fd(100,100);
+    delay(100);
+    tr(80,60);
+    delay(100);
     trackline_Cross(60,1,100);
 }
 
