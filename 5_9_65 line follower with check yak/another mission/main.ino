@@ -23,7 +23,7 @@ int baseSpeed = 70;
 int maxSpeed = 255;
 int motorSpeed;
 int leftSpeed, rightSpeed;
-int Kp = 23;
+int Kp = 14;
 int Kd = 4;
 float Ki = 0;
 int error = 0, pre_error = 0, sum_error;
@@ -63,17 +63,32 @@ void setup()
     pinMode(6, INPUT);
     pinMode(2, INPUT);
     delay(500);
-    trackline_R(60, 1);
-    tr_sensor(80, 80);
-    trackline_R(60, 5);
-    tr_sensor(80, 80);
-    delay(300);
-    bd(40, 40);
-    delay(300);
-    stop(false);
-    fd(80,80);
+    trackline_R(60, 1,100);
+    tr_sensor(70,50);
+    trackline_R(60,1,100);
+    tr_sensor(70,50);
+    trackline_L(60,1,0);
+    trackline_Cross(60,1,0);
+    trackline_R(60,1,0);
+    trackline_Cross(60,2,100);
+    tl(40,80);
     delay(600);
+    tl_sensor(50,80);
+    trackline_R(60,2,100);
+    readSensor();
+    tr(60,60);
+    delay(400);
+    while(!(W(L2_value) && W(L1_value) && B(C_value) && W(R1_value) && W(R2_value))){
+        readSensor();
+        tr(60,60);
+    }
     stop(false);
+    delay(100);
+    fd(80,80);
+    delay(500);
+    tr(60,60);
+    delay(400);
+    trackline_Cross(60,1,100);
 }
 
 void loop()
@@ -121,35 +136,43 @@ void trackline_1(int fd_speed, int turn_speed, int turn_ms)
 void trackline_pid()
 {
     readSensor();
-    if (W(L2_value) && W(L1_value) && W(C_value) && B(R1_value))
+    if (W(L2_value) && W(L1_value) && W(C_value) && W(R1_value) && B(R2_value))
     {
-        error = 3; // w w w w b
+        error = 4; // w w w w b
     }
-    else if (W(L2_value) && W(L1_value) && B(C_value) && B(R1_value))
+    else if (W(L2_value) && W(L1_value) && W(C_value) && B(R1_value) && B(R2_value))
     {
-        error = 2; // w w w b b
+        error = 3; // w w w b b
     }
-    else if (W(L2_value) && W(L1_value) && B(C_value) && W(R1_value))
+    else if (W(L2_value) && W(L1_value) && W(C_value) && B(R1_value) && W(R2_value))
     {
-        error = 1; // w w w b w
+        error = 2; // w w w b w
     }
-    else if (W(L2_value) && B(L1_value) && B(C_value) && W(R1_value))
+    else if (W(L2_value) && W(L1_value) && B(C_value) && B(R1_value) && W(R2_value))
     {
-        error = 0; // w w b b w
+        error = 1; // w w b b w
     }
-    else if (W(L2_value) && B(L1_value) && W(C_value) && W(R1_value))
+    else if (W(L2_value) && W(L1_value) && B(C_value) && W(R1_value) && W(R2_value))
     {
-        error = -1; // w w b w w
+        error = 0; // w w b w w
     }
-    else if (B(L2_value) && B(L1_value) && W(C_value) && W(R1_value))
+    else if (W(L2_value) && B(L1_value) && B(C_value) && W(R1_value) && W(R2_value))
     {
-        error = -2; // w b b w w
+        error = -1; // w b b w w
     }
-    else if (B(L2_value) && W(L1_value) && W(C_value) && W(R1_value))
+    else if (W(L2_value) && B(L1_value) && W(C_value) && W(R1_value) && W(R2_value))
     {
-        error = -3; // w b w w w
+        error = -2; // w b w w w
     }
-    else if (W(L2_value) && W(L1_value) && W(C_value) && W(R1_value))
+    else if (B(L2_value) && B(L1_value) && W(C_value) && W(R1_value) && W(R2_value))
+    {
+        error = -3; // b b w w w
+    }
+    else if (B(L2_value) && W(L1_value) && W(C_value) && W(R1_value) && W(R2_value))
+    {
+        error = -4; // b w w w w
+    }
+    else if (W(L2_value) && W(L1_value) && W(C_value) && W(R1_value) && W(R2_value))
     {
         error = pre_error; // w w w w w
     }
@@ -170,7 +193,7 @@ void trackline_pid()
     pre_error = error;
     sum_error += error;
 }
-void trackline_R(int turn_speed, int line)
+void trackline_R(int turn_speed, int line,int ms_delay)
 {
     int count = 0;
     while (count < line)
@@ -190,10 +213,11 @@ void trackline_R(int turn_speed, int line)
             }
         }
     }
+    delay(ms_delay);
     stop(false);
 }
 
-void trackline_L(int turn_speed, int line)
+void trackline_L(int turn_speed, int line,int ms_delay)
 {
     int count = 0;
     while (count < line)
@@ -213,10 +237,11 @@ void trackline_L(int turn_speed, int line)
             }
         }
     }
+    delay(ms_delay);
     stop(false);
 }
 
-void trackline_Cross(int turn_speed, int line)
+void trackline_Cross(int turn_speed, int line,int ms_delay)
 {
     int count = 0;
     while (count < line)
@@ -236,6 +261,7 @@ void trackline_Cross(int turn_speed, int line)
             }
         }
     }
+    delay(ms_delay);
     stop(false);
 }
 
@@ -252,6 +278,26 @@ void tr_sensor(int L_speed, int R_speed)
     while (C_value == 1)
     {
         sr(L_speed, R_speed);
+        readSensor();
+    }
+    delay(100);
+    stop(false);
+}
+
+
+void tl_sensor(int L_speed, int R_speed)
+{
+    fd(L_speed, R_speed);
+    delay(100);
+    stop(false);
+    delay(100);
+    sl(L_speed, R_speed);
+    delay(400);
+    stop(false);
+    readSensor();
+    while (C_value == 1)
+    {
+        sl(L_speed, R_speed);
         readSensor();
     }
     delay(100);
