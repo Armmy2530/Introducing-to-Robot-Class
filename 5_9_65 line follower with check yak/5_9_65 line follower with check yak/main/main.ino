@@ -19,12 +19,12 @@ int turn_ms = 20;
 int fd_speed = 80;
 int turn_speed = 20;
 
-int baseSpeed = 70;
+int baseSpeed = 80;
 int maxSpeed = 255;
 int motorSpeed;
 int leftSpeed, rightSpeed;
-int Kp = 23;
-int Kd = 4;
+int Kp = 26;
+int Kd = 0;
 float Ki = 0;
 int error = 0, pre_error = 0, sum_error;
 
@@ -64,15 +64,19 @@ void setup()
     pinMode(2, INPUT);
     delay(500);
     trackline_R(60, 1);
-    tr_sensor(80, 80);
-    trackline_R(60, 5);
-    tr_sensor(80, 80);
-    delay(300);
-    bd(40, 40);
-    delay(300);
-    stop(false);
-    fd(80,80);
-    delay(600);
+    tr_sensor(80, 40);
+    trackline_R(60, 7);
+    fd(60,60);
+    delay(400);
+    m(0,-100);
+    delay(100);
+    while(!(W(L2_value) && W(L1_value) && W(C_value) && B(R1_value) && W(R2_value))){
+        readSensor();
+        m(0,-100);
+    }
+    trackline_Cross(80,1);
+    m(70,70);
+    delay(500);
     stop(false);
 }
 

@@ -70,25 +70,32 @@ void setup()
     trackline_L(60,1,0);
     trackline_Cross(60,1,0);
     trackline_R(60,1,0);
-    trackline_Cross(60,2,150);
+    trackline_Cross(60,2,100);
     tl(40,80);
     delay(600);
     tl_sensor(50,80);
     delay(300);
-    trackline_R(60,2,100);
+    fd(100,100);
+    delay(200);
+    trackline_R(60,1,300);
     readSensor();
-    tr(100,60);
-    delay(100);
     while(!(W(L2_value) && W(L1_value) && B(C_value) && W(R1_value) && W(R2_value))){
         readSensor();
-        tr(60,60);
+        m(0,-100);
     }
     stop(false);
     delay(100);
-    fd(100,100);
-    delay(100);
-    tr(80,60);
-    delay(100);
+    trackline_R(60,2,100);
+//    m(0,-80);
+//    delay(200);
+    while(!(W(L2_value) && B(L1_value) && W(C_value) && W(R1_value) && W(R2_value))){
+        readSensor();
+        m(0,-90);
+    }
+//    tr(80,60);
+//    delay(600);
+//    tr_sensor(80,60);
+
     trackline_Cross(60,1,100);
 }
 
@@ -248,12 +255,12 @@ void trackline_Cross(int turn_speed, int line,int ms_delay)
     while (count < line)
     {
         trackline_pid();
-        if (B(R1_value) && B(L1_value))
+        if (B(R2_value) && B(L2_value))
         {
             delay(100);
-            if (R1_value == 0 && L1_value == 0)
+            if (R2_value == 0 && L2_value == 0)
             {
-                while (L1_value == 0 && R1_value == 0)
+                while (L2_value == 0 && R2_value == 0)
                 {
                     fd(fd_speed, fd_speed);
                     readSensor();
