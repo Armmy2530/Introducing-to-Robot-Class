@@ -41,25 +41,25 @@ void loop() {
     if (PS4.R2()) {
       Serial.printf("R2 button at %d\n", PS4.R2Value());
     }
-
-    if (PS4.LStickX()) {
-      Serial.printf("Left Stick x at %d\n", PS4.LStickX());
-    }
-    if (PS4.LStickY()) {
-      Serial.printf("Left Stick y at %d\n", PS4.LStickY());
-    }
-    if (PS4.RStickX()) {
-      Serial.printf("Right Stick x at %d\n", PS4.RStickX());
-    }
-    if (PS4.RStickY()) {
-      Serial.printf("Right Stick y at %d\n", PS4.RStickY());
-    }
+//
+//    if (PS4.LStickX()) {
+//      Serial.printf("Left Stick x at %d\n", PS4.LStickX());
+//    }
+//    if (PS4.LStickY()) {
+//      Serial.printf("Left Stick y at %d\n", PS4.LStickY());
+//    }
+//    if (PS4.RStickX()) {
+//      Serial.printf("Right Stick x at %d\n", PS4.RStickX());
+//    }
+//    if (PS4.RStickY()) {
+//      Serial.printf("Right Stick y at %d\n", PS4.RStickY());
+//    }
 
     if (PS4.Charging()) Serial.println("The controller is charging");
     if (PS4.Audio()) Serial.println("The controller has headphones attached");
     if (PS4.Mic()) Serial.println("The controller has a mic attached");
-
-    Serial.printf("Battery Level : %d\n", PS4.Battery());
+//
+//    Serial.printf("Battery Level : %d\n", PS4.Battery());
 
     Serial.println();
     // This delay is to make the output more human readable

@@ -31,7 +31,9 @@ int turn_ms = 20;
 int fd_speed = 80;
 int turn_speed = 20;
 
-int baseSpeed = 70;
+int ref = 2500;
+
+int baseSpeed = 170;
 int maxSpeed = 255;
 int motorSpeed;
 int leftSpeed, rightSpeed;
@@ -42,7 +44,7 @@ int error = 0, pre_error = 0, sum_error;
 
 bool W(int n)
 {
-    if (n == 1)
+    if (n > ref)
     {
         return true;
     }
@@ -53,7 +55,7 @@ bool W(int n)
 }
 bool B(int n)
 {
-    if (n == 0)
+    if (n < ref)
     {
         return true;
     }
@@ -99,17 +101,19 @@ void setup()
 void loop()
 {
     readSensor();
-    Serial.print(L2_value);
+    trackline_pid();
+    Serial.print(W(L2_value));
+    Serial.print(W(L1_value));
+    Serial.print(W(C_value));
+    Serial.print(W(R1_value));
+    Serial.print(W(R2_value));
     Serial.print(" ");
-    Serial.print(L1_value);
-    Serial.print(" ");
-    Serial.print(C_value);
-    Serial.print(" ");
-    Serial.print(R1_value);
-    Serial.print(" ");
-    Serial.print(R2_value);
-    Serial.print(" ");
-    Serial.println();
+    Serial.print(B(L2_value));
+    Serial.print(B(L1_value));
+    Serial.print(B(C_value));
+    Serial.print(B(R1_value));
+    Serial.print(B(R2_value));
+    Serial.println(" ");
 }
 void readSensor()
 {
@@ -176,7 +180,7 @@ void trackline_pid()
         leftSpeed = -maxSpeed;
     if (rightSpeed < -maxSpeed)
         rightSpeed = -maxSpeed;
-    // m(leftSpeed, rightSpeed);
+    m(leftSpeed, rightSpeed);
     pre_error = error;
     sum_error += error;
 }
